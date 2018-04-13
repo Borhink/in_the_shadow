@@ -1,26 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-	// enum LevelType {RotationX, }
-	public Transform[] objects;
-	public Vector3[] positions;
-	public Vector3[] rotations;
-	// Use this for initialization
-	void Start () {
-		for (int i = 0; i < objects.Length; ++i)
-		{
-			positions[i] = objects[i].position;
-			rotations[i] = objects[i].eulerAngles;
-		}
+	public static GameManager gm = null;
+	public AudioClip[] clips;
+	int clipIndex = 0;
+
+	AudioSource audioSource;
+
+	void Awake () {
+		if (gm == null)
+			gm = this;
+		else if (gm != this)
+       		Destroy(gameObject);    
+        DontDestroyOnLoad(gameObject);
+		audioSource = GetComponent<AudioSource>();
 	}
-	
-	// Update is called once per frame
+	void Start () {
+		audioSource.clip = clips[0];
+	}
+
 	void Update () {
-		if (Input.GetMouseButton(0))
+		if (!audioSource.isPlaying)
 		{
-			// rotations[i]
+			clipIndex = (clipIndex + 1) % clips.Length;
+			audioSource.clip = clips[clipIndex];
+			audioSource.Play();
 		}
+		if (Input.GetKeyDown(KeyCode.R))
+			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+		if (Input.GetKeyDown(KeyCode.N))
+			audioSource.Stop();
 	}
 }
