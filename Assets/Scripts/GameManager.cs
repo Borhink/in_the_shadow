@@ -14,18 +14,18 @@ public class GameManager : MonoBehaviour {
 		if (gm == null)
 			gm = this;
 		else if (gm != this)
-       		Destroy(gameObject);    
+       		Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 		audioSource = GetComponent<AudioSource>();
 	}
 	void Start () {
-		audioSource.clip = clips[0];
+		audioSource.clip = clips[Random.Range(0, clips.Length)];
 	}
 
 	void Update () {
 		if (!audioSource.isPlaying)
 		{
-			clipIndex = (clipIndex + 1) % clips.Length;
+			clipIndex = (clipIndex + Random.Range(1, clips.Length)) % clips.Length;
 			audioSource.clip = clips[clipIndex];
 			audioSource.Play();
 		}

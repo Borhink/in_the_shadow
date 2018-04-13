@@ -22,19 +22,19 @@ public class CameraMovement : MonoBehaviour {
 	void Update()
 	{
 		float speed = Mathf.PingPong(Time.time, startDuration / 4) / (startDuration / 4);
-		if (duration > startDuration / 2)
+		if (!toOrigin)
 		{
 			transform.position += randomDirection * power * Time.deltaTime * speed;
 			transform.LookAt(board);
 			duration -= Time.deltaTime;
-		}
-		else
-		{
-			if (!toOrigin)
+			if (duration <= startDuration / 2)
 			{
 				dirOrigin = (originalPos - transform.position).normalized;
 				toOrigin = true;
 			}
+		}
+		else
+		{
 			transform.position += dirOrigin * power * Time.deltaTime * speed;
 			transform.LookAt(board);
 			duration -= Time.deltaTime;
