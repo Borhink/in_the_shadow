@@ -138,4 +138,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   rotations:
   - {x: 0, y: 0, z: 0}
-  type: 0
+  type: 2
+  maxErrorPosY: 0.1
+  maxErrorRotVert: 3
+  maxErrorRotHoriz: 2

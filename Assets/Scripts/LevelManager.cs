@@ -8,8 +8,14 @@ public class LevelManager : MonoBehaviour {
 	public Vector3[] positions;
 	public Vector3[] rotations;
 	public LevelType type = LevelType.RotationX;
+	public float maxErrorPosY = 0.1f;
+	public float maxErrorRotVert = 3f;
+	public float maxErrorRotHoriz = 3f;
 	float rotationSpeed = 90f;
 	float translationSpeed = 2f;
+	float maxY = 1.15f;
+	float minY = 0.63f;
+	bool win = false;
 
 	void Start () {
 		for (int i = 0; i < objects.Length; ++i)
@@ -42,11 +48,39 @@ public class LevelManager : MonoBehaviour {
 				horizontalRotation = -Input.GetAxis("Mouse X");
 			objects[0].eulerAngles += new Vector3(0f, horizontalRotation, verticalRotation) * Time.deltaTime * rotationSpeed;
 			objects[0].position += new Vector3(0f, verticalPosition, 0) * Time.deltaTime * translationSpeed;
-			if (objects[0].position.y > 1.3f)
-				objects[0].position = new Vector3(objects[0].position.x, 1.4f, objects[0].position.z);
-			if (objects[0].position.y < 0.35f)
-				objects[0].position = new Vector3(objects[0].position.x, 0.35f, objects[0].position.z);
+			if (objects[0].position.y > maxY)
+				objects[0].position = new Vector3(objects[0].position.x, maxY, objects[0].position.z);
+			if (objects[0].position.y < minY)
+				objects[0].position = new Vector3(objects[0].position.x, minY, objects[0].position.z);
 		}
+		checkVictory();
 	}
 
+	void checkVictory()
+	{
+		for (int i = 0; i < objects.Length; ++i)
+		{
+			int error = 0;
+			if (type >= LevelType.PositionY)
+			{
+				if (objects[i].position.y >= positions[i].y - maxErrorPosY && objects[i].position.y <= positions[i].y + maxErrorPosY)
+					Debug.Log("Position OK");
+				else
+					++error;
+			}
+			if (type >= LevelType.RotationXY)
+			{
+				if (objects[i].eulerAngles.z >= rotations[i].z - maxErrorRotVert && objects[i].eulerAngles.z <= rotations[i].z + maxErrorRotVert)
+					Debug.Log("Rotation Vertical OK");
+				else
+					++error;
+			}
+			if (objects[i].eulerAngles.y >= rotations[i].y - maxErrorRotHoriz && objects[i].eulerAngles.y <= rotations[i].y + maxErrorRotHoriz)
+				Debug.Log("Rotation Horizontal OK");
+			else
+				++error;
+			if (error == 0)
+				Debug.Log("OK");
+		}
+	}
 }

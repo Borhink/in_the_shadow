@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 28cae30b45d7a45d3a7c7d2f9aa63dff
+timeCreated: 1523714038
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Shadowfield DEMO
+  fontNames:
+  - Shadowfield DEMO
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
