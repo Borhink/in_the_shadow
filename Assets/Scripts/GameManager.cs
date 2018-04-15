@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 	public AudioClip[] clips;
 	int clipIndex = 0;
 
-	AudioSource audioSource;
+	[HideInInspector]public AudioSource audioSource;
 
 	void Awake () {
 		if (gm == null)
@@ -17,6 +17,10 @@ public class GameManager : MonoBehaviour {
        		Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 		audioSource = GetComponent<AudioSource>();
+		if (PlayerPrefs.HasKey("musicVolume"))
+			audioSource.volume = PlayerPrefs.GetFloat("musicVolume");
+		else
+			audioSource.volume = 0.5f;
 	}
 	void Start () {
 		audioSource.clip = clips[Random.Range(0, clips.Length)];

@@ -10,16 +10,18 @@ public class HolderMovement : MonoBehaviour {
 	bool toOrigin = false;
 	float duration;
 	Vector3 originRotation;
+	float timer;
 
 	void Start()
 	{
 		duration = startDuration;
 		originRotation = transform.eulerAngles;
+		timer = 0f;
 	}
 
 	void Update()
 	{
-		float speed = Mathf.PingPong(Time.time, startDuration / 4) / (startDuration / 4);
+		float speed = Mathf.PingPong(timer, startDuration / 4) / (startDuration / 4);
 		if (!toOrigin)
 		{
 			transform.Rotate(new Vector3(originDir * power * speed * Time.deltaTime, 0, 0));
@@ -40,5 +42,6 @@ public class HolderMovement : MonoBehaviour {
 			}
 		}
 		duration -= Time.deltaTime;
+		timer += Time.deltaTime;
 	}
 }

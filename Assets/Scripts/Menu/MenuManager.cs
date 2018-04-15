@@ -1,16 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour {
-
-	Transform selected = null;
-	Vector3 selectedScale;
+	public GameObject[] menus;
+	public SliderScript musicSlider;
 	public float zoomRange = 0.3f;
 	public float zoomSpeed = 5f;
+
+	Transform selected = null;
+	SliderScript selectedSlider = null;
+	Vector3 selectedScale;
 	float timer = 0f;
+	int curMenu = 0;
+
 	void Start () {
-		
+
+		if (!PlayerPrefs.HasKey("musicVolume"))
+			PlayerPrefs.SetFloat("musicVolume", 0.5f);
+		if (musicSlider)
+			musicSlider.setValue(PlayerPrefs.GetFloat("musicVolume"));
 	}
 
 	void Update () {
@@ -32,12 +42,58 @@ public class MenuManager : MonoBehaviour {
 					selected.localScale = new Vector3(selectedScale.x * (1f + zoom), selectedScale.y * (1f + zoom), selectedScale.z * (1f + zoom));
 				}
 			}
-			else if (selected)
+			else if (hit.collider.tag == "Slider")
 			{
-				selected.localScale = selectedScale;
-				selected = null;
-				timer = 0;
+				selected = hit.transform;
+				selectedScale = selected.localScale;
+				selectedSlider = selected.GetComponent<SliderScript>();
 			}
+			else if (selected)
+				unselectButton();
 		}
+		if (Input.GetMouseButtonDown(0) && selected && selected.tag == "Button")
+		{
+			UnityEngine.UI.Button button;
+			if ((button = selected.GetComponent<UnityEngine.UI.Button>()))
+				button.onClick.Invoke();
+		}
+		if (Input.GetMouseButton(0) && selected && selected.tag == "Slider")
+			selectedSlider.updateSlider();
+	}
+
+	void unselectButton()
+	{
+		if (selectedSlider)
+			selectedSlider = null;
+		selected.localScale = selectedScale;
+		selected = null;
+		timer = 0;
+	}
+
+	public void loadLevel(string name)
+	{
+		SceneManager.LoadScene(name);
+	}
+
+	public void loadMenu(int id)
+	{
+		menus[curMenu].SetActive(false);
+		menus[id].SetActive(true);
+		curMenu = id;
+		if (selected)
+			unselectButton();
+	}
+
+	public void reset()
+	{
+		PlayerPrefs.DeleteAll();
+		PlayerPrefs.SetFloat("musicVolume", 0.5f);
+		if (musicSlider)
+			musicSlider.setValue(PlayerPrefs.GetFloat("musicVolume"));
+	}
+
+	public void exit()
+	{
+		Application.Quit();
 	}
 }

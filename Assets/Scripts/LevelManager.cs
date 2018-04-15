@@ -23,6 +23,8 @@ public class LevelManager : MonoBehaviour {
 			positions[i] = objects[i].position;
 			rotations[i] = objects[i].eulerAngles;
 		}
+		Cursor.visible = true;
+		Cursor.lockState = CursorLockMode.None;
 	}
 
 	void Update () {
@@ -80,7 +82,10 @@ public class LevelManager : MonoBehaviour {
 			else
 				++error;
 			if (error == 0)
+			{
+				win = true;
 				Debug.Log("OK");
+			}
 		}
 	}
 }
