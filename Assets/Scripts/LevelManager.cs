@@ -25,6 +25,17 @@ public class LevelManager : MonoBehaviour {
 		}
 		Cursor.visible = true;
 		Cursor.lockState = CursorLockMode.None;
+		for (int i = 0; i < objects.Length; ++i)
+		{
+			float verticalRotation = 0f, horizontalRotation = 0f, verticalPosition = 0f;
+			if (type >= LevelType.PositionY)
+				verticalPosition += Random.Range(minY, maxY);
+			if (type >= LevelType.RotationXY)
+				verticalRotation = Random.Range(20f, GameManager.gm.difficulty);
+			horizontalRotation = Random.Range(20f, GameManager.gm.difficulty);
+			objects[i].eulerAngles = new Vector3(0f, horizontalRotation, verticalRotation);
+			objects[i].position = new Vector3(objects[i].position.x, verticalPosition, objects[i].position.z);
+		}
 	}
 
 	void Update () {

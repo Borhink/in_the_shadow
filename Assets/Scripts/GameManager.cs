@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 	public AudioClip[] clips;
 	int clipIndex = 0;
 
+	[HideInInspector]public float difficulty = 140f;
 	[HideInInspector]public AudioSource audioSource;
 
 	void Awake () {
