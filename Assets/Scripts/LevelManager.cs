@@ -20,7 +20,7 @@ public class LevelManager : MonoBehaviour {
 	void Start () {
 		for (int i = 0; i < objects.Length; ++i)
 		{
-			positions[i] = objects[i].position;
+			positions[i] = objects[i].localPosition;
 			rotations[i] = objects[i].eulerAngles;
 		}
 		Cursor.visible = true;

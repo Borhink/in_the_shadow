@@ -14,6 +14,7 @@ public class MenuManager : MonoBehaviour {
 	Vector3 selectedScale;
 	float timer = 0f;
 	int curMenu = 0;
+	bool testMenu = false;
 
 	void Start () {
 
@@ -77,6 +78,14 @@ public class MenuManager : MonoBehaviour {
 
 	public void loadMenu(int id)
 	{
+		
+		if (id == 3)
+		{
+			id -= 1;
+			testMenu = true;
+		}
+		else
+			testMenu = false;
 		menus[curMenu].SetActive(false);
 		menus[id].SetActive(true);
 		curMenu = id;
