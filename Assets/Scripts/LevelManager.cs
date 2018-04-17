@@ -16,7 +16,6 @@ public class LevelManager : MonoBehaviour {
 	float maxY = 1.15f;
 	float minY = 0.63f;
 	bool win = false;
-
 	void Start () {
 		for (int i = 0; i < objects.Length; ++i)
 		{
@@ -77,21 +76,15 @@ public class LevelManager : MonoBehaviour {
 			int error = 0;
 			if (type >= LevelType.PositionY)
 			{
-				if (objects[i].position.y >= positions[i].y - maxErrorPosY && objects[i].position.y <= positions[i].y + maxErrorPosY)
-					Debug.Log("Position OK");
-				else
+				if (objects[i].position.y < positions[i].y - maxErrorPosY || objects[i].position.y > positions[i].y + maxErrorPosY)
 					++error;
 			}
 			if (type >= LevelType.RotationXY)
 			{
-				if (objects[i].eulerAngles.z >= rotations[i].z - maxErrorRotVert && objects[i].eulerAngles.z <= rotations[i].z + maxErrorRotVert)
-					Debug.Log("Rotation Vertical OK");
-				else
+				if (objects[i].eulerAngles.z < rotations[i].z - maxErrorRotVert && objects[i].eulerAngles.z > rotations[i].z + maxErrorRotVert)
 					++error;
 			}
-			if (objects[i].eulerAngles.y >= rotations[i].y - maxErrorRotHoriz && objects[i].eulerAngles.y <= rotations[i].y + maxErrorRotHoriz)
-				Debug.Log("Rotation Horizontal OK");
-			else
+			if (objects[i].eulerAngles.y < rotations[i].y - maxErrorRotHoriz && objects[i].eulerAngles.y > rotations[i].y + maxErrorRotHoriz)
 				++error;
 			if (error == 0)
 			{

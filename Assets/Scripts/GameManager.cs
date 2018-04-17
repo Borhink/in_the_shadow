@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
 	public AudioClip[] clips;
 	int clipIndex = 0;
 
+	[HideInInspector]public bool testMenu = false;
 	[HideInInspector]public float difficulty = 140f;
 	[HideInInspector]public AudioSource audioSource;
 
