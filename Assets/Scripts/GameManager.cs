@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour {
 	}
 	void Start () {
 		audioSource.clip = clips[Random.Range(0, clips.Length)];
-		initLevels();
+		initLevels(false);
 	}
 
 	void Update () {
@@ -43,14 +43,16 @@ public class GameManager : MonoBehaviour {
 			audioSource.Stop();
 	}
 
-	public void initLevels()
+	public void initLevels(bool reset = false)
 	{
 		for (int i = 1; i <= nbLevels; ++i)
 		{
-			if (PlayerPrefs.HasKey("unlocked" + i))
+			if (!PlayerPrefs.HasKey("unlocked" + i) || reset)
 				PlayerPrefs.SetInt("unlocked" + i, 0);
-			if (PlayerPrefs.HasKey("success" + i))
+			if (!PlayerPrefs.HasKey("success" + i) || reset)
 				PlayerPrefs.SetInt("success" + i, 0);
+			if (!PlayerPrefs.HasKey("newSuccess" + i) || reset)
+				PlayerPrefs.SetInt("newSuccess" + i, 0);
 		}
 		PlayerPrefs.SetInt("unlocked1", 1);
 	}

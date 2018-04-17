@@ -91,9 +91,10 @@ public class MenuManager : MonoBehaviour {
 	{
 		PlayerPrefs.DeleteAll();
 		PlayerPrefs.SetFloat("musicVolume", 0.5f);
-		GameManager.gm.initLevels();
+		GameManager.gm.initLevels(true);
 		if (musicSlider)
 			musicSlider.setValue(PlayerPrefs.GetFloat("musicVolume"));
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
 	public void exit()

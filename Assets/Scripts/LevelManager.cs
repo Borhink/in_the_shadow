@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum LevelType {RotationX, RotationXY, PositionY};
 public class LevelManager : MonoBehaviour {
+	public int id = 1;
 	public Transform[] objects;
 	public Vector3[] positions;
 	public Vector3[] rotations;
@@ -89,7 +90,10 @@ public class LevelManager : MonoBehaviour {
 			if (error == 0)
 			{
 				win = true;
-				Debug.Log("OK");
+				PlayerPrefs.SetInt("success" + id, 1);
+				PlayerPrefs.SetInt("newSuccess" + id, 1);
+				PlayerPrefs.SetInt("unlocked" + (id + 1), 1);
+				PlayerPrefs.SetInt("newUnlock" + (id + 1), 1);
 			}
 		}
 	}
