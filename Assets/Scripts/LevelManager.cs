@@ -34,7 +34,8 @@ public class LevelManager : MonoBehaviour {
 				verticalRotation = Random.Range(20f, GameManager.gm.difficulty);
 			horizontalRotation = Random.Range(20f, GameManager.gm.difficulty);
 			objects[i].eulerAngles = new Vector3(0f, horizontalRotation, verticalRotation);
-			objects[i].position = new Vector3(objects[i].position.x, verticalPosition, objects[i].position.z);
+			if (type >= LevelType.PositionY)
+				objects[i].position = new Vector3(objects[i].position.x, verticalPosition, objects[i].position.z);
 		}
 	}
 

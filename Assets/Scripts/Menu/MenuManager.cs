@@ -71,11 +71,6 @@ public class MenuManager : MonoBehaviour {
 		timer = 0;
 	}
 
-	public void loadLevel(string name)
-	{
-		SceneManager.LoadScene(name);
-	}
-
 	public void loadMenu(int id)
 	{
 		
@@ -97,6 +92,7 @@ public class MenuManager : MonoBehaviour {
 	{
 		PlayerPrefs.DeleteAll();
 		PlayerPrefs.SetFloat("musicVolume", 0.5f);
+		GameManager.gm.initLevels();
 		if (musicSlider)
 			musicSlider.setValue(PlayerPrefs.GetFloat("musicVolume"));
 	}

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 	public static GameManager gm = null;
+	public int nbLevels = 10;
 	public AudioClip[] clips;
 	int clipIndex = 0;
 
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour {
 	}
 	void Start () {
 		audioSource.clip = clips[Random.Range(0, clips.Length)];
+		initLevels();
 	}
 
 	void Update () {
@@ -38,5 +40,17 @@ public class GameManager : MonoBehaviour {
 			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		if (Input.GetKeyDown(KeyCode.N))
 			audioSource.Stop();
+	}
+
+	public void initLevels()
+	{
+		for (int i = 1; i <= nbLevels; ++i)
+		{
+			if (PlayerPrefs.HasKey("unlocked" + i))
+				PlayerPrefs.SetInt("unlocked" + i, 0);
+			if (PlayerPrefs.HasKey("success" + i))
+				PlayerPrefs.SetInt("success" + i, 0);
+		}
+		PlayerPrefs.SetInt("unlocked1", 1);
 	}
 }
