@@ -36,6 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4484723466944302}
+  - component: {fileID: 65523720316687528}
   m_Layer: 0
   m_Name: GlobeEarth
   m_TagString: Untagged
@@ -50,7 +51,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1925243183923918}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.118, y: 0.94, z: 1.613}
+  m_LocalPosition: {x: 1.118, y: 0.943, z: 1.613}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4956116715259888}
@@ -111,3 +112,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1044345664424988}
   m_Mesh: {fileID: 4300000, guid: b504fe830b41c4516bf4a9fab494f986, type: 3}
+--- !u!65 &65523720316687528
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1925243183923918}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.35, y: 0.33, z: 0.3}
+  m_Center: {x: -0.05, y: 0, z: 0}

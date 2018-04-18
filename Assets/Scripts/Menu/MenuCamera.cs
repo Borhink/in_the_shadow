@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuCamera : MonoBehaviour {
-	public Transform light;
+	public Transform cameraLight;
 	public float minX  = -30f;
 	public float maxX  = 30f;
 	public float minY  = -60f;
@@ -39,7 +39,7 @@ public class MenuCamera : MonoBehaviour {
 
 			RaycastHit hit;
 			if (Physics.Raycast(transform.position, transform.forward, out hit))
-				light.LookAt(hit.point);
+				cameraLight.LookAt(hit.point);
 		}
 	}
 }

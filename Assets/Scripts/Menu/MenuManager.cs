@@ -73,7 +73,7 @@ public class MenuManager : MonoBehaviour {
 	public void loadMenu(int id)
 	{
 		
-		if (id == 3)
+		if (id == 4)
 		{
 			id -= 1;
 			GameManager.gm.testMenu = true;

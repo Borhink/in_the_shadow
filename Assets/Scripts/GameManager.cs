@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 	public static GameManager gm = null;
-	public int nbLevels = 5;
+	public int nbLevels = 6;
 	public AudioClip[] clips;
 	int clipIndex = 0;
 

@@ -10,46 +10,38 @@ public class LevelManager : MonoBehaviour {
 	public Transform[] objects;
 	public Vector3[] positions;
 	public Vector3[] rotations;
+	public Vector3[] rotations2;
 	public LevelType type = LevelType.RotationX;
 	public float maxErrorPosY = 0.1f;
 	public float maxErrorRotVert = 3f;
 	public float maxErrorRotHoriz = 3f;
+
 	float rotationSpeed = 90f;
 	float translationSpeed = 2f;
-	float maxY = 1.15f;
-	float minY = 0.63f;
+	float maxY = 1.1f;
+	float minY = 0.55f;
 	bool win = false;
+	Transform toMove = null;
 	void Start () {
 		for (int i = 0; i < objects.Length; ++i)
 		{
-			positions[i] = objects[i].localPosition;
-			rotations[i] = objects[i].eulerAngles;
+			if (i >= 1)
+				positions[i] = new Vector3(objects[i].position.x - objects[i - 1].position.x, objects[i].position.y - objects[i - 1].position.y, objects[i].position.z - objects[i - 1].position.z);
+			// rotations[i] = objects[i].eulerAngles;
 		}
 		Cursor.visible = true;
 		Cursor.lockState = CursorLockMode.None;
-		for (int i = 0; i < objects.Length; ++i)
-		{
-			float verticalRotation = 0f, horizontalRotation = 0f, verticalPosition = 0f;
-			if (type >= LevelType.PositionY)
-				verticalPosition += Random.Range(minY, maxY);
-			if (type >= LevelType.RotationXY)
-				verticalRotation = Random.Range(20f, GameManager.gm.difficulty);
-			horizontalRotation = Random.Range(20f, GameManager.gm.difficulty);
-			objects[i].eulerAngles = new Vector3(0f, horizontalRotation, verticalRotation);
-			if (type >= LevelType.PositionY)
-				objects[i].position = new Vector3(objects[i].position.x, verticalPosition, objects[i].position.z);
-		}
+		randomizeObjects();
 	}
 
 	void Update () {
+
 		if (Input.GetKeyDown(KeyCode.Q))
 			SceneManager.LoadScene("Scenes/MainMenu");
 		if (win)
 		{
 			if (Input.GetKeyDown(KeyCode.N) && (id + 1) <= GameManager.gm.nbLevels)
 				SceneManager.LoadScene("Scenes/Level" + (id + 1));
-			if ((id + 1) <= GameManager.gm.nbLevels)
-
 			if (winMenu.position.y > 1.120736f)
 				winMenu.position += new Vector3(0f, -0.5f * Time.deltaTime, 0f);
 			if (winMenu.position.y < 1.120736f)
@@ -58,6 +50,7 @@ public class LevelManager : MonoBehaviour {
 		}
 		if (Input.GetMouseButtonDown(0))
 		{
+			selectObject();
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
 		}
@@ -65,55 +58,160 @@ public class LevelManager : MonoBehaviour {
 		{
 			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
+			toMove = null;
 		}
 		if (Input.GetMouseButton(0))
-		{
-			float verticalRotation = 0f, horizontalRotation = 0f, verticalPosition = 0f;
-			
-			if (type >= LevelType.PositionY && Input.GetKey(KeyCode.LeftShift))
-				verticalPosition = Input.GetAxis("Mouse Y");
-			else if (type >= LevelType.RotationXY && Input.GetKey(KeyCode.LeftControl))
-				verticalRotation = Input.GetAxis("Mouse Y");
-			else
-				horizontalRotation = -Input.GetAxis("Mouse X");
-			objects[0].eulerAngles += new Vector3(0f, horizontalRotation, verticalRotation) * Time.deltaTime * rotationSpeed;
-			objects[0].position += new Vector3(0f, verticalPosition, 0) * Time.deltaTime * translationSpeed;
-			if (objects[0].position.y > maxY)
-				objects[0].position = new Vector3(objects[0].position.x, maxY, objects[0].position.z);
-			if (objects[0].position.y < minY)
-				objects[0].position = new Vector3(objects[0].position.x, minY, objects[0].position.z);
-		}
+			transformObject();
 		if (!win)
 			checkVictory();
 	}
 
+	void checkRotation(int i, ref int error)
+	{
+		float val = -666f;
+
+		foreach (Vector3 angle in (i == 0 ? rotations : rotations2))
+		{
+			if (type >= LevelType.RotationXY)
+			{
+				val = objects[i].eulerAngles.z > 180 ? objects[i].eulerAngles.z - 360 : objects[i].eulerAngles.z;
+				if (Mathf.Abs(val - angle.z) > maxErrorRotVert)
+					continue;
+			}
+			val = objects[i].eulerAngles.y > 180 ? objects[i].eulerAngles.y - 360 : objects[i].eulerAngles.y;
+			if (Mathf.Abs(val - angle.y) <= maxErrorRotHoriz)
+				return;
+			Debug.Log(i + ") ErrorRotVert: " + val + " - " + angle.z + " <= " + maxErrorRotVert);
+			Debug.Log(i + ") ErrorRotHoriz: " + val + " - " + angle.y + " <=> " + maxErrorRotHoriz);
+		}
+		++error;
+	}
+
+	// void checkHorizontalRotation(int i, ref int error)
+	// {
+	// 	float val = -666f;
+	// 	Debug.Log(objects[i].rotation);
+
+	// 	foreach (Vector3 angle in (i == 0 ? rotations : rotations2))
+	// 	{
+	// 		val = objects[i].eulerAngles.y > 180 ? objects[i].eulerAngles.y - 360 : objects[i].eulerAngles.y;
+	// 		if (Mathf.Abs(val - angle.y) <= maxErrorRotHoriz)
+	// 			return;
+	// 		Debug.Log(i + ") ErrorRotHoriz: " + val + " - " + angle.y + " <=> " + maxErrorRotHoriz);
+	// 	}
+	// 	++error;
+	// }
+
 	void checkVictory()
+	{
+		int error = 0;
+		// float val;
+		ClearConsole();//DEBUG
+		for (int i = 0; i < objects.Length; ++i)
+		{
+			if (type >= LevelType.PositionY)
+			{
+				if (i >= 1 && Mathf.Abs(objects[i].position.y - objects[i - 1].position.y - positions[i].y) > maxErrorPosY)
+				{
+					++error;
+					Debug.Log(i + ") ErrorPos: " + Mathf.Abs(objects[i].position.y - objects[i - 1].position.y - positions[i].y) + " > " + maxErrorPosY);
+				}
+			}
+			checkRotation(i, ref error);
+			// if (type >= LevelType.RotationXY)
+			// {
+				// val = objects[i].eulerAngles.z > 180 ? objects[i].eulerAngles.z - 360 : objects[i].eulerAngles.z;
+				// if (Mathf.Abs(val - rotations[i].z) > maxErrorRotVert)
+				// {
+				// 	++error;
+				// 	Debug.Log(i + ") ErrorRotVert: " + val + " - " + rotations[i].z + " > " + maxErrorRotVert);
+				// }
+			// 	checkVerticalRotation(i, ref error);
+			// }
+			// val = objects[i].eulerAngles.y > 180 ? objects[i].eulerAngles.y - 360 : objects[i].eulerAngles.y;
+			// if (Mathf.Abs(val - rotations[i].y) > maxErrorRotHoriz)
+			// {
+			// 	++error;
+			// 	Debug.Log(i + ") ErrorRotHoriz: " + val + " - " + rotations[i].y + " > " + maxErrorRotHoriz);
+			// }
+			// checkHorizontalRotation(i, ref error);
+		}
+		if (error == 0)
+		{
+			win = true;
+			rotationSpeed = 1f;
+			translationSpeed = 0.02f;
+			if (PlayerPrefs.HasKey("success" + id) && PlayerPrefs.GetInt("success" + id) == 1)
+				return;
+			PlayerPrefs.SetInt("success" + id, 1);
+			PlayerPrefs.SetInt("newSuccess" + id, 1);
+			PlayerPrefs.SetInt("unlocked" + (id + 1), 1);
+			PlayerPrefs.SetInt("newUnlock" + (id + 1), 1);
+		}
+	}
+
+	static void ClearConsole()//DEBUG
+	{
+		var logEntries = System.Type.GetType("UnityEditor.LogEntries, UnityEditor.dll");
+	
+		var clearMethod = logEntries.GetMethod("Clear", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+	
+		clearMethod.Invoke(null, null);
+	}
+
+	void randomizeObjects()
 	{
 		for (int i = 0; i < objects.Length; ++i)
 		{
-			int error = 0;
+			float verticalRotation = 0f, horizontalRotation = 0f, verticalPosition = 0f;
+
 			if (type >= LevelType.PositionY)
-			{
-				if (objects[i].position.y < positions[i].y - maxErrorPosY || objects[i].position.y > positions[i].y + maxErrorPosY)
-					++error;
-			}
+				verticalPosition += UnityEngine.Random.Range(minY, maxY);
 			if (type >= LevelType.RotationXY)
+				verticalRotation = UnityEngine.Random.Range(20f, GameManager.gm.difficulty);
+			horizontalRotation = UnityEngine.Random.Range(20f, GameManager.gm.difficulty);
+			objects[i].eulerAngles = new Vector3(0f, horizontalRotation, verticalRotation);
+			if (type >= LevelType.PositionY)
+				objects[i].position = new Vector3(objects[i].position.x, verticalPosition, objects[i].position.z);
+		}
+	}
+
+	void selectObject()
+	{
+		Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+
+		Physics.Raycast(cameraRay, out hit);
+		if (hit.collider && !toMove)
+		{
+			for (int i = 0; i < objects.Length; ++i)
 			{
-				if (objects[i].eulerAngles.z < rotations[i].z - maxErrorRotVert || objects[i].eulerAngles.z > rotations[i].z + maxErrorRotVert)
-					++error;
-			}
-			if (objects[i].eulerAngles.y < rotations[i].y - maxErrorRotHoriz || objects[i].eulerAngles.y > rotations[i].y + maxErrorRotHoriz)
-				++error;
-			if (error == 0)
-			{
-				win = true;
-				if (PlayerPrefs.HasKey("success" + id) && PlayerPrefs.GetInt("success" + id) == 1)
-					return;
-				PlayerPrefs.SetInt("success" + id, 1);
-				PlayerPrefs.SetInt("newSuccess" + id, 1);
-				PlayerPrefs.SetInt("unlocked" + (id + 1), 1);
-				PlayerPrefs.SetInt("newUnlock" + (id + 1), 1);
+				if (hit.collider.transform == objects[i])
+				{
+					toMove = objects[i];
+					break;
+				}
 			}
 		}
+	}
+
+	void transformObject()
+	{
+		float verticalRotation = 0f, horizontalRotation = 0f, verticalPosition = 0f;
+
+		if (type >= LevelType.PositionY && Input.GetKey(KeyCode.LeftShift))
+			verticalPosition = Input.GetAxis("Mouse Y");
+		else if (type >= LevelType.RotationXY && Input.GetKey(KeyCode.LeftControl))
+			verticalRotation = Input.GetAxis("Mouse Y");
+		else
+			horizontalRotation = -Input.GetAxis("Mouse X");
+		if (!toMove)
+			return;
+		toMove.eulerAngles += new Vector3(0f, horizontalRotation, verticalRotation) * Time.deltaTime * rotationSpeed;
+		toMove.position += new Vector3(0f, verticalPosition, 0) * Time.deltaTime * translationSpeed;
+		if (toMove.position.y > maxY)
+			toMove.position = new Vector3(toMove.position.x, maxY, toMove.position.z);
+		if (toMove.position.y < minY)
+			toMove.position = new Vector3(toMove.position.x, minY, toMove.position.z);
 	}
 }
