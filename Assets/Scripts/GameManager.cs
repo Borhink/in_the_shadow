@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 	public static GameManager gm = null;
-	public int nbLevels = 10;
+	public int nbLevels = 5;
 	public AudioClip[] clips;
 	int clipIndex = 0;
 
@@ -37,9 +37,7 @@ public class GameManager : MonoBehaviour {
 			audioSource.clip = clips[clipIndex];
 			audioSource.Play();
 		}
-		if (Input.GetKeyDown(KeyCode.R))
-			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-		if (Input.GetKeyDown(KeyCode.N))
+		if (Input.GetKeyDown(KeyCode.M))
 			audioSource.Stop();
 	}
 

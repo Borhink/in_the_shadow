@@ -27,6 +27,12 @@ public class ButtonLevel : MonoBehaviour {
 			success = PlayerPrefs.GetInt("success" + id);
 		if (GameManager.gm.testMenu == false && unlocked == 0)
 			transform.parent.localScale /= 3;
+		if (PlayerPrefs.GetInt("newUnlock" + id) == 1)
+		{
+			if (PlayerPrefs.GetInt("newSuccess" + id) != 1)
+				StartCoroutine(unlockAnimation());
+			PlayerPrefs.SetInt("newUnlock" + id, 0);
+		}
 		if (success == 1)
 		{
 			if (PlayerPrefs.GetInt("newSuccess" + id) == 1)
@@ -36,11 +42,6 @@ public class ButtonLevel : MonoBehaviour {
 			}
 			else
 				transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, transform.localEulerAngles.z);
-		}
-		if (PlayerPrefs.GetInt("newUnlock" + id) == 1)
-		{
-			StartCoroutine(unlockAnimation());
-			PlayerPrefs.SetInt("newUnlock" + id, 0);
 		}
     }
 

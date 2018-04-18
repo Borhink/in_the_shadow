@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum LevelType {RotationX, RotationXY, PositionY};
 public class LevelManager : MonoBehaviour {
 	public int id = 1;
+	public Transform winMenu;
 	public Transform[] objects;
 	public Vector3[] positions;
 	public Vector3[] rotations;
@@ -40,6 +42,20 @@ public class LevelManager : MonoBehaviour {
 	}
 
 	void Update () {
+		if (Input.GetKeyDown(KeyCode.Q))
+			SceneManager.LoadScene("Scenes/MainMenu");
+		if (win)
+		{
+			if (Input.GetKeyDown(KeyCode.N) && (id + 1) <= GameManager.gm.nbLevels)
+				SceneManager.LoadScene("Scenes/Level" + (id + 1));
+			if ((id + 1) <= GameManager.gm.nbLevels)
+
+			if (winMenu.position.y > 1.120736f)
+				winMenu.position += new Vector3(0f, -0.5f * Time.deltaTime, 0f);
+			if (winMenu.position.y < 1.120736f)
+				winMenu.position = new Vector3(winMenu.position.x, 1.120736f, winMenu.position.z);
+
+		}
 		if (Input.GetMouseButtonDown(0))
 		{
 			Cursor.visible = false;
@@ -67,7 +83,8 @@ public class LevelManager : MonoBehaviour {
 			if (objects[0].position.y < minY)
 				objects[0].position = new Vector3(objects[0].position.x, minY, objects[0].position.z);
 		}
-		checkVictory();
+		if (!win)
+			checkVictory();
 	}
 
 	void checkVictory()
@@ -82,14 +99,16 @@ public class LevelManager : MonoBehaviour {
 			}
 			if (type >= LevelType.RotationXY)
 			{
-				if (objects[i].eulerAngles.z < rotations[i].z - maxErrorRotVert && objects[i].eulerAngles.z > rotations[i].z + maxErrorRotVert)
+				if (objects[i].eulerAngles.z < rotations[i].z - maxErrorRotVert || objects[i].eulerAngles.z > rotations[i].z + maxErrorRotVert)
 					++error;
 			}
-			if (objects[i].eulerAngles.y < rotations[i].y - maxErrorRotHoriz && objects[i].eulerAngles.y > rotations[i].y + maxErrorRotHoriz)
+			if (objects[i].eulerAngles.y < rotations[i].y - maxErrorRotHoriz || objects[i].eulerAngles.y > rotations[i].y + maxErrorRotHoriz)
 				++error;
 			if (error == 0)
 			{
 				win = true;
+				if (PlayerPrefs.HasKey("success" + id) && PlayerPrefs.GetInt("success" + id) == 1)
+					return;
 				PlayerPrefs.SetInt("success" + id, 1);
 				PlayerPrefs.SetInt("newSuccess" + id, 1);
 				PlayerPrefs.SetInt("unlocked" + (id + 1), 1);
