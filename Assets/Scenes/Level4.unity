@@ -661,12 +661,12 @@ Prefab:
     - target: {fileID: 114068646942879876, guid: 3d4b8ebde94414622b7bb7bc1149f3f7,
         type: 2}
       propertyPath: maxErrorRotHoriz
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114068646942879876, guid: 3d4b8ebde94414622b7bb7bc1149f3f7,
         type: 2}
       propertyPath: maxErrorRotVert
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114068646942879876, guid: 3d4b8ebde94414622b7bb7bc1149f3f7,
         type: 2}

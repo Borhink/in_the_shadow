@@ -917,18 +917,6 @@ Prefab:
       propertyPath: m_Name
       value: monkey
       objectReference: {fileID: 0}
-    - target: {fileID: 4664303648993326, guid: 8b216c5a77ce54e38952b4240456aa72, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 4664303648993326, guid: 8b216c5a77ce54e38952b4240456aa72, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.20500001
-      objectReference: {fileID: 0}
-    - target: {fileID: 4664303648993326, guid: 8b216c5a77ce54e38952b4240456aa72, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -5.4420004
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8b216c5a77ce54e38952b4240456aa72, type: 2}
   m_IsPrefabParent: 0
