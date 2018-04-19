@@ -633,7 +633,7 @@ Prefab:
     - target: {fileID: 114068646942879876, guid: 3d4b8ebde94414622b7bb7bc1149f3f7,
         type: 2}
       propertyPath: rotations.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4522505030348004, guid: 3d4b8ebde94414622b7bb7bc1149f3f7, type: 2}
       propertyPath: m_LocalPosition.x
@@ -725,7 +725,7 @@ Prefab:
     - target: {fileID: 114068646942879876, guid: 3d4b8ebde94414622b7bb7bc1149f3f7,
         type: 2}
       propertyPath: rotations.Array.data[2].y
-      value: 180
+      value: 175.275
       objectReference: {fileID: 0}
     - target: {fileID: 114068646942879876, guid: 3d4b8ebde94414622b7bb7bc1149f3f7,
         type: 2}
