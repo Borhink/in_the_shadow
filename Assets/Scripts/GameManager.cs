@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour {
 			audioSource.volume = 0.5f;
 	}
 	void Start () {
-		audioSource.clip = clips[Random.Range(0, clips.Length)];
+		audioSource.clip = clips[0];
 		initLevels(false);
 	}
 

@@ -27,7 +27,6 @@ public class LevelManager : MonoBehaviour {
 		{
 			if (i >= 1)
 				positions[i] = new Vector3(objects[i].position.x - objects[i - 1].position.x, objects[i].position.y - objects[i - 1].position.y, objects[i].position.z - objects[i - 1].position.z);
-			// rotations[i] = objects[i].eulerAngles;
 		}
 		Cursor.visible = true;
 		Cursor.lockState = CursorLockMode.None;
@@ -87,26 +86,10 @@ public class LevelManager : MonoBehaviour {
 		++error;
 	}
 
-	// void checkHorizontalRotation(int i, ref int error)
-	// {
-	// 	float val = -666f;
-	// 	Debug.Log(objects[i].rotation);
-
-	// 	foreach (Vector3 angle in (i == 0 ? rotations : rotations2))
-	// 	{
-	// 		val = objects[i].eulerAngles.y > 180 ? objects[i].eulerAngles.y - 360 : objects[i].eulerAngles.y;
-	// 		if (Mathf.Abs(val - angle.y) <= maxErrorRotHoriz)
-	// 			return;
-	// 		Debug.Log(i + ") ErrorRotHoriz: " + val + " - " + angle.y + " <=> " + maxErrorRotHoriz);
-	// 	}
-	// 	++error;
-	// }
-
 	void checkVictory()
 	{
 		int error = 0;
-		// float val;
-		ClearConsole();//DEBUG
+
 		for (int i = 0; i < objects.Length; ++i)
 		{
 			if (type >= LevelType.PositionY)
@@ -118,23 +101,6 @@ public class LevelManager : MonoBehaviour {
 				}
 			}
 			checkRotation(i, ref error);
-			// if (type >= LevelType.RotationXY)
-			// {
-				// val = objects[i].eulerAngles.z > 180 ? objects[i].eulerAngles.z - 360 : objects[i].eulerAngles.z;
-				// if (Mathf.Abs(val - rotations[i].z) > maxErrorRotVert)
-				// {
-				// 	++error;
-				// 	Debug.Log(i + ") ErrorRotVert: " + val + " - " + rotations[i].z + " > " + maxErrorRotVert);
-				// }
-			// 	checkVerticalRotation(i, ref error);
-			// }
-			// val = objects[i].eulerAngles.y > 180 ? objects[i].eulerAngles.y - 360 : objects[i].eulerAngles.y;
-			// if (Mathf.Abs(val - rotations[i].y) > maxErrorRotHoriz)
-			// {
-			// 	++error;
-			// 	Debug.Log(i + ") ErrorRotHoriz: " + val + " - " + rotations[i].y + " > " + maxErrorRotHoriz);
-			// }
-			// checkHorizontalRotation(i, ref error);
 		}
 		if (error == 0)
 		{
@@ -148,15 +114,6 @@ public class LevelManager : MonoBehaviour {
 			PlayerPrefs.SetInt("unlocked" + (id + 1), 1);
 			PlayerPrefs.SetInt("newUnlock" + (id + 1), 1);
 		}
-	}
-
-	static void ClearConsole()//DEBUG
-	{
-		var logEntries = System.Type.GetType("UnityEditor.LogEntries, UnityEditor.dll");
-	
-		var clearMethod = logEntries.GetMethod("Clear", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
-	
-		clearMethod.Invoke(null, null);
 	}
 
 	void randomizeObjects()
